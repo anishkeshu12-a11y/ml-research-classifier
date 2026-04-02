@@ -1,0 +1,11 @@
+pandas
+scikit-learn
+nltk
+contractions
+openpyxl
+pyinstaller
+grpcio
+grpcio-health-checking
+fastapi
+uvicorn
+pydantic

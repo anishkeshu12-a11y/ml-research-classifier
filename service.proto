@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package classifier;
+
+service ClassifierService {
+  rpc ClassifyText (PredictRequest) returns (PredictResponse) {}
+}
+
+message PredictRequest {
+  string text = 1;
+}
+
+message PredictResponse {
+  bool computer_science = 1;
+  bool physics = 2;
+  bool mathematics = 3;
+  bool statistics = 4;
+  bool quantitative_biology = 5;
+  bool quantitative_finance = 6;
+}
