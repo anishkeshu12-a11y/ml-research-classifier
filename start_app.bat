@@ -2,7 +2,7 @@
 echo ==========================================
 echo Starting Python ML API Server...
 echo ==========================================
-start "ML Backend Server" cmd /c "cd server && python web_server.py"
+start "ML Backend Server" cmd /c "cd server && py web_server.py"
 
 echo.
 echo ==========================================
