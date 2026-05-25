@@ -1,5 +1,7 @@
 # Academic Research Paper Classifier (Multi-Label NLP System)
 
+**Author:** Keshav ([anishkeshu12-a11y](https://github.com/anishkeshu12-a11y))
+
 A multi-label classification system that categorizes academic research papers into multiple scientific domains (Computer Science, Physics, Mathematics, Statistics, Quantitative Biology, and Quantitative Finance) based on their titles and abstracts.
 
 The project features a **FastAPI backend** that serves model predictions, a **React (Vite) frontend** with a responsive dark-mode UI, and a **Python machine learning pipeline** using Scikit-Learn and NLTK.
@@ -123,18 +125,18 @@ Features were extracted using **TF-IDF with unigrams and bigrams** (max features
 
 ---
 
-## Interview Q&A & Talking Points
+## Design Decisions & Performance Optimizations
 
-Here are the key design decisions and optimizations to highlight in Data Science / ML interviews:
+Here are the key architectural decisions and performance optimizations implemented in this project:
 
-### 1. How did you optimize inference latency?
+### 1. Latency Optimization: Eliminating Inference Bottlenecks
 *   **The Bottleneck:** The original implementation re-loaded a 16MB raw features file and re-fitted the TF-IDF vectorizer on every single API request. This resulted in an unacceptable latency of 2 to 3 seconds per prediction.
-*   **The Fix:** I refactored the pipeline to fit the vectorizer during the training phase and saved it as a serialized asset (`vectorizer.pkl`). I also implemented a global caching mechanism in FastAPI (`predictor.py`) to load the model and vectorizer into memory on startup. This reduced inference latency to **under 5 milliseconds** (a 500x speedup).
+*   **The Fix:** The pipeline was refactored to fit the vectorizer during the training phase and save it as a serialized asset (`vectorizer.pkl`). A global caching mechanism in FastAPI (`predictor.py`) loads the model and vectorizer into memory on startup. This reduced inference latency to **under 5 milliseconds** (a 500x speedup).
 
-### 2. Why use TF-IDF + Linear SVM instead of deep learning (e.g. BERT)?
-*   **Cost vs. Latency:** While a transformer model like BERT might offer a 2-3% improvement in F1-score, it requires a GPU for low-latency inference, leading to higher hosting costs.
+### 2. Model Selection: TF-IDF & Linear SVM vs. Deep Learning (BERT)
+*   **Cost vs. Latency:** While a transformer model like BERT might offer a 2-3% improvement in F1-score, it requires a GPU for low-latency inference, leading to higher hosting and hardware costs.
 *   **Practicality:** TF-IDF with bigrams captures scientific terminology very effectively, and a Linear SVM classifier runs in milliseconds on standard, inexpensive CPUs with a minimal RAM footprint. This makes it a highly practical, production-ready solution for standard enterprise workloads.
 
-### 3. Why did you choose Linear SVM over Logistic Regression?
+### 3. Classifier Choice: Support Vector Machines vs. Logistic Regression
 *   **High-Dimensional Margin:** TF-IDF text features are high-dimensional and sparse. Support Vector Machines search for the maximum-margin hyperplane, which is robust to overfitting in high-dimensional spaces. 
-*   **Handling Class Imbalance:** Scientific labels are highly imbalanced (many Computer Science papers, very few Quantitative Finance papers). Linear SVM achieved a **Macro F1-score of 0.6745** compared to Logistic Regression's **0.6081**, indicating that the SVM is much better at identifying minority classes.
+*   **Handling Class Imbalance:** Scientific labels are highly imbalanced (many Computer Science papers, very few Quantitative Finance papers). Linear SVM achieved a **Macro F1-score of 0.6745** compared to Logistic Regression's **0.6081**, indicating that the SVM is much more effective at identifying minority classes.
