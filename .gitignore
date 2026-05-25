@@ -61,8 +61,8 @@ flutter_sdk/
 bin/
 include/
 dataset_model/
-# Depending if you want the data included, we don't ignore model.pkl and train_features.csv by default,
+train.csv
+# Depending if you want the data included, we don't ignore model.pkl, vectorizer.pkl and train_features.csv by default,
 # as they are under 100MB and might be needed to run the project.
-
 
 app/assets/*.exe
